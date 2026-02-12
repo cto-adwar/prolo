@@ -123,7 +123,6 @@
         "placeholder": "Enter complete address",
         "error": "Address is required"
       },
-
       "receiverName": {
         "label": "Receiver Name",
         "placeholder": "Enter receiver's full name",
@@ -163,14 +162,13 @@
         "placeholder": "Enter complete address",
         "error": "Address is required"
       },
-
       "cod": {
         "label": "COD Amount",
         "placeholder": "Enter COD amount",
         "error": "COD amount is required"
       },
       "notes": {
-        "label": "Notes",
+        "label": "Notes (Optional)",
         "placeholder": "Add any additional notes",
         "error": ""
       },
@@ -186,15 +184,35 @@
         "error": "Quantity is required"
       },
       "description": {
-        "label": "Package Description",
+        "label": "Package Description (Optional)",
         "placeholder": "Describe what's inside the package",
         "error": "Description is required"
       },
-
       "tracking": {
         "label": "Track Your Shipment",
         "placeholder": "Enter your tracking number"
-      }
+      },
+      "serviceType": {
+        "label": "Service Type",
+        "placeholder": "Select Service Type",
+        "error": "Service type is required"
+      },
+      "originNationalAddress": {
+        "label": "National Address (Optional)",
+        "placeholder": "Enter national address",
+        "error": "National address is required"
+      },
+      "destinationNationalAddress": {
+        "label": "National Address (Optional)",
+        "placeholder": "Enter national address",
+        "error": "National address is required"
+      },
+      "weight": {
+        "label": "Weight",
+        "placeholder": "Enter package weight",
+        "error": "Weight is required"
+      },
+      "policy": "By clicking this I agree to"
     },
     "messages": {
       "subscription": "Thank you for subscribing!",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Input, Select, Textarea, ButtonClient, SearchSelect } from "../components";
 import { useMessages } from "next-intl";
@@ -17,6 +17,12 @@ import axios from "axios";
 import { createShipmentReference } from "./utils/createShipmentReferece";
 import { getLinkExpiryDate } from "./utils/getLinkExpiryDate";
 import { getPaymentLink } from "./utils/getPaymentLink";
+import PolicyPopup from "../PolicyPopup";
+import { Icon } from "@iconify/react";
+
+const BASE_CITY_RATE = 35;
+const INTERCITY_RATE = 75;
+const FREE_WEIGHT = 10;
 
 export default function CreateShipmentForm() {
   const {
@@ -31,6 +37,7 @@ export default function CreateShipmentForm() {
       cod: "0",
       shipmentType: "COD",
       quantity: "1",
+      policyAccepted: false,
     },
   });
 
@@ -39,10 +46,16 @@ export default function CreateShipmentForm() {
   const [loader, setLoader] = useState<boolean>(false);
 
   const [step, setStep] = useState(1);
+  const policyAccepted = watch("policyAccepted");
 
   const shipmentTypeOptions = [
     { value: "COD", name: "COD" },
     { value: "REGULAR", name: "PREPAID" },
+  ];
+
+  const serviceTypeIdOptions = [
+    { value: "342", name: "COLD" },
+    { value: "341", name: "DRY" },
   ];
 
   const router = useRouter();
@@ -102,21 +115,23 @@ export default function CreateShipmentForm() {
   }
 
   // 1. For Cities (both Origin & Destination)
-  const cities = addresses
-    .filter((addr, ind, self) => {
-      return ind === self.findIndex(t => t.cityId === addr.cityId);
-    })
-    .map(addr => {
-      return {
-        value: addr.cityId,
-        name: addr.cityName,
-      };
-    })
-    .sort((a, b) =>
-      a.name
-        .toLocaleLowerCase()
-        .localeCompare(b.name.toLocaleLowerCase(), locale, { sensitivity: "base" })
-    );
+  const cities = useMemo(() => {
+    return addresses
+      .filter((addr, ind, self) => {
+        return ind === self.findIndex(t => t.cityId === addr.cityId);
+      })
+      .map(addr => {
+        return {
+          value: addr.cityId,
+          name: addr.cityName,
+        };
+      })
+      .sort((a, b) =>
+        a.name
+          .toLocaleLowerCase()
+          .localeCompare(b.name.toLocaleLowerCase(), locale, { sensitivity: "base" })
+      );
+  }, [addresses, locale]);
 
   // 2. For Destination Adresses
   const [destinationVillages, setDestinationVillages] = useState<
@@ -206,10 +221,18 @@ export default function CreateShipmentForm() {
   };
   // HANDLE FORM SUBMISSION
   const onSubmit: SubmitHandler<CreateShipmentFormInputs> = async data => {
+    if (!data.policyAccepted) {
+      return;
+    }
+
+    // Generate & Calculate Some Variables
     const referenceNumber = createShipmentReference(locale as "en" | "ar");
     const linkExpiry = getLinkExpiryDate(2);
-    const shipmentAmount = data.originCityId === data.destinationCityId ? 35 : 75;
-    setAmount(shipmentAmount);
+    const shipmentAmount =
+      data.originCityId === data.destinationCityId ? BASE_CITY_RATE : INTERCITY_RATE;
+    const weightOver10 =
+      parseFloat(data.weight as string) > 10 ? parseFloat(data.weight as string) - FREE_WEIGHT : 0;
+    setAmount(shipmentAmount + weightOver10);
 
     // Generate Link
     setLoader(true);
@@ -219,9 +242,9 @@ export default function CreateShipmentForm() {
       email: data.senderEmail,
       urlExpiry: linkExpiry,
       referenceNumber: referenceNumber,
-      amount: shipmentAmount,
+      amount: shipmentAmount + weightOver10,
       currency: "SAR",
-      reportingField1: "Testing 1",
+      reportingField1: `Payment For ${referenceNumber}`,
     });
 
     if (paymentLinkResponse && paymentLinkResponse !== null) {
@@ -273,7 +296,7 @@ export default function CreateShipmentForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full space-y-6">
       {/* Step Indicator */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 grid grid-cols-4">
         {formSteps.map((label, index) => (
           <div
             key={index}
@@ -296,7 +319,7 @@ export default function CreateShipmentForm() {
             <div className="form-grid">
               <Input
                 icon="fluent:rename-a-20-regular"
-                label={messages.senderName.label}
+                label={messages.senderName.label + ` *`}
                 id="senderName"
                 placeholder={messages.senderName.placeholder}
                 error={errors.senderName && messages.senderName.error}
@@ -305,7 +328,7 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="material-symbols:alternate-email"
-                label={messages.senderEmail.label}
+                label={messages.senderEmail.label + ` *`}
                 id="senderEmail"
                 placeholder={messages.senderEmail.placeholder}
                 error={errors.senderEmail && messages.senderEmail.error}
@@ -323,7 +346,7 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="hugeicons:call-02"
-                label={messages.senderPhone.label}
+                label={messages.senderPhone.label + ` *`}
                 id="senderPhone"
                 type="tel"
                 placeholder={messages.senderPhone.placeholder}
@@ -348,7 +371,7 @@ export default function CreateShipmentForm() {
               {/* Origitn City */}
               <SearchSelect
                 icon="solar:city-outline"
-                label={messages.originCityId.label}
+                label={messages.originCityId.label + ` *`}
                 id="originCityId"
                 options={cities}
                 placeholder={messages.originCityId.placeholder}
@@ -363,7 +386,7 @@ export default function CreateShipmentForm() {
               {/* Origin Village */}
               <SearchSelect
                 icon="fontisto:holiday-village"
-                label={messages.originVillageId.label}
+                label={messages.originVillageId.label + ` *`}
                 id="originVillageId"
                 options={originVillages}
                 placeholder={messages.originVillageId.placeholder}
@@ -378,11 +401,21 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="fluent:street-sign-20-regular"
-                label={messages.originAddressLine1.label}
+                label={messages.originAddressLine1.label + ` *`}
                 id="originAddressLine1"
                 placeholder={messages.originAddressLine1.placeholder}
                 error={errors.originAddressLine1 && messages.originAddressLine1.error}
                 registerProps={{ ...register("originAddressLine1", { required: true }) }}
+              />
+
+              {/* Origin National Address */}
+              <Input
+                icon="hugeicons:maps-global-01"
+                label={messages.originNationalAddress.label}
+                id="originNationalAddress"
+                placeholder={messages.originNationalAddress.placeholder}
+                error={errors.originNationalAddress && messages.originNationalAddress.error}
+                registerProps={{ ...register("originNationalAddress", { required: false }) }}
               />
             </div>
           </fieldset>
@@ -399,7 +432,7 @@ export default function CreateShipmentForm() {
             <div className="form-grid">
               <Input
                 icon="fluent:rename-a-20-regular"
-                label={messages.receiverName.label}
+                label={messages.receiverName.label + ` *`}
                 id="receiverName"
                 placeholder={messages.receiverName.placeholder}
                 error={errors.receiverName && messages.receiverName.error}
@@ -408,7 +441,7 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="material-symbols:alternate-email"
-                label={messages.receiverEmail.label}
+                label={messages.receiverEmail.label + ` *`}
                 id="receiverEmail"
                 placeholder={messages.receiverEmail.placeholder}
                 error={errors.receiverEmail && messages.receiverEmail.error}
@@ -417,7 +450,7 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="hugeicons:call-02"
-                label={messages.receiverPhone.label}
+                label={messages.receiverPhone.label + ` *`}
                 id="receiverPhone"
                 type="tel"
                 placeholder={messages.receiverPhone.placeholder}
@@ -443,7 +476,7 @@ export default function CreateShipmentForm() {
               {/* Destination City */}
               <SearchSelect
                 icon="solar:city-outline"
-                label={messages.destinationCityId.label}
+                label={messages.destinationCityId.label + ` *`}
                 id="destinationCityId"
                 options={cities}
                 placeholder={messages.destinationCityId.placeholder}
@@ -458,7 +491,7 @@ export default function CreateShipmentForm() {
               {/* Destination Village Id */}
               <SearchSelect
                 icon="fontisto:holiday-village"
-                label={messages.destinationVillageId.label}
+                label={messages.destinationVillageId.label + ` *`}
                 id="destinationVillageId"
                 options={destinationVillages}
                 placeholder={messages.destinationVillageId.placeholder}
@@ -473,11 +506,23 @@ export default function CreateShipmentForm() {
 
               <Input
                 icon="fluent:street-sign-20-regular"
-                label={messages.destinationAddressLine1.label}
+                label={messages.destinationAddressLine1.label + ` *`}
                 id="destinationAddressLine1"
                 placeholder={messages.destinationAddressLine1.placeholder}
                 error={errors.destinationAddressLine1 && messages.destinationAddressLine1.error}
                 registerProps={{ ...register("destinationAddressLine1", { required: true }) }}
+              />
+
+              {/* Origin National Address */}
+              <Input
+                icon="hugeicons:maps-global-01"
+                label={messages.destinationNationalAddress.label}
+                id="destinationNationalAddress"
+                placeholder={messages.destinationNationalAddress.placeholder}
+                error={
+                  errors.destinationNationalAddress && messages.destinationNationalAddress.error
+                }
+                registerProps={{ ...register("destinationNationalAddress", { required: false }) }}
               />
             </div>
           </fieldset>
@@ -487,9 +532,20 @@ export default function CreateShipmentForm() {
       {/* -------------------- STEP 3 -------------------- */}
       {step === 3 && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {/* Service Type Id */}
+          <Select
+            icon="hugeicons:container-truck"
+            label={messages.serviceType.label + ` *`}
+            id="serviceType"
+            options={serviceTypeIdOptions}
+            placeholder={messages.serviceType.placeholder}
+            registerProps={{ ...register("serviceTypeId", { required: true }) }}
+            error={errors.serviceTypeId && messages.serviceType.error}
+          />
+
           <Select
             icon="streamline-ultimate:shipment-star"
-            label={messages.shipmentType.label}
+            label={messages.shipmentType.label + ` *`}
             id="shipmentType"
             options={shipmentTypeOptions}
             placeholder={messages.shipmentType.placeholder}
@@ -499,25 +555,37 @@ export default function CreateShipmentForm() {
 
           <Input
             icon="mdi:cod"
-            label={messages.cod.label}
+            label={messages.cod.label + ` *`}
             id="cod"
             disabled={disableCod}
             min="0"
             type="number"
             placeholder={messages.cod.placeholder}
             error={errors.cod && messages.cod.error}
-            registerProps={{ ...register("cod", { required: true }) }}
+            registerProps={{ ...register("cod", { required: !disableCod }) }}
           />
 
           <Input
             icon="fluent-mdl2:quantity"
-            label={messages.quantity.label}
+            label={messages.quantity.label + ` *`}
             id="quantity"
             type="number"
             min="1"
             placeholder={messages.quantity.placeholder}
             error={errors.quantity && messages.quantity.error}
             registerProps={{ ...register("quantity", { required: true }) }}
+          />
+
+          {/* Weight */}
+          <Input
+            icon="hugeicons:weight-scale"
+            label={messages.weight.label + ` *`}
+            id="weight"
+            type="number"
+            min="1"
+            placeholder={messages.weight.placeholder}
+            error={errors.weight && messages.weight.error}
+            registerProps={{ ...register("weight", { required: true }) }}
           />
 
           <div className="form-grid md:col-span-2">
@@ -538,6 +606,26 @@ export default function CreateShipmentForm() {
               error={errors.description && messages.description.error}
               registerProps={{ ...register("description", { required: false }) }}
             />
+          </div>
+
+          {/* Policy Section */}
+          <div className="flex w-full items-center gap-0">
+            <input
+              type="hidden"
+              {...register("policyAccepted", {
+                required: true,
+              })}
+            />
+            <div
+              className={`size-5 cursor-pointer rounded-md border`}
+              onClick={() => setValue("policyAccepted", !policyAccepted, { shouldValidate: true })}
+            >
+              {policyAccepted && <Icon icon="hugeicons:tick-01" className="size-full" />}
+            </div>
+            <p className="mx-2 flex items-center gap-1">
+              {messages.policy}
+              <PolicyPopup className="text-theme-blue font-medium underline" />
+            </p>
           </div>
         </div>
       )}
@@ -606,12 +694,16 @@ export default function CreateShipmentForm() {
           />
         )}
 
+        {/* Policy Confirmation */}
         {step === 3 && (
           <ButtonClient
             type="submit"
-            text={`${ctas("checkout")}`}
+            text={ctas("checkout")}
             icon={false}
-            className="rounded-xl bg-green-500 text-white"
+            disabled={!policyAccepted}
+            className={`rounded-xl text-white ${
+              policyAccepted ? "bg-green-500" : "cursor-not-allowed bg-gray-400"
+            }`}
           />
         )}
       </div>

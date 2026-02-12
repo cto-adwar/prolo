@@ -164,7 +164,7 @@
         "error": "مبلغ الـ COD مطلوب"
       },
       "notes": {
-        "label": "ملاحظات",
+        "label": "ملاحظات (اختياري)",
         "placeholder": "أضف أي ملاحظات إضافية",
         "error": ""
       },
@@ -180,7 +180,7 @@
         "error": "الكمية مطلوبة"
       },
       "description": {
-        "label": "وصف المحتوى",
+        "label": "وصف المحتوى (اختياري)",
         "placeholder": "صف ما يوجد داخل الشحنة",
         "error": "الوصف مطلوب"
       },
@@ -188,7 +188,29 @@
       "tracking": {
         "label": "تتبع شحنتك",
         "placeholder": "أدخل رقم التتبع الخاص بك"
-      }
+      },
+
+      "serviceType": {
+        "label": "نوع الخدمة",
+        "placeholder": "اختر نوع الخدمة",
+        "error": "نوع الخدمة مطلوب"
+      },
+      "originNationalAddress": {
+        "label": "العنوان الوطني (اختياري)",
+        "placeholder": "أدخل العنوان الوطني",
+        "error": "العنوان الوطني مطلوب"
+      },
+      "destinationNationalAddress": {
+        "label": "العنوان الوطني (اختياري)",
+        "placeholder": "أدخل العنوان الوطني",
+        "error": "العنوان الوطني مطلوب"
+      },
+      "weight": {
+        "label": "الوزن",
+        "placeholder": "أدخل وزن الطرد",
+        "error": "الوزن مطلوب"
+      },
+      "policy": "بالنقر هنا أوافق على"
     },
 
     "messages": {

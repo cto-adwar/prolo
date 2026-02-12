@@ -573,6 +573,9 @@ export const buildSenderShipEmailBody = (
     expectedDeliveryDate,
     shipmentType,
     cod,
+    serviceType,
+    quantity,
+    weight,
   }: {
     senderName: string;
     shipmentId: string | number;
@@ -583,6 +586,9 @@ export const buildSenderShipEmailBody = (
     expectedDeliveryDate: string;
     shipmentType: "COD" | "REGULAR";
     cod: string | number;
+    quantity: string | number;
+    weight: string | number;
+    serviceType: string;
   }
 ) => {
   if (locale === "ar") {
@@ -643,6 +649,9 @@ export const buildSenderShipEmailBody = (
   <div class="section">
     <h3>معلومات إضافية</h3>
     <ul>
+      <li>نوع الخدمة : <code>${serviceType}</code></li>
+      <li>الكمية : <code>${quantity}</code></li>
+      <li>الوزن : <code>${weight}</code></li>
       <li>نوع الشحنة: <code>${shipmentType}</code></li>
       <li>مبلغ الدفع عند الاستلام: <code>${cod} ريال سعودي</code></li>
     </ul>
@@ -711,6 +720,9 @@ export const buildSenderShipEmailBody = (
       <div class="section">
         <h3>Additional Information</h3>
         <ul>
+          <li>Service Type : <code>${serviceType}</code></li>
+          <li>Quantity : <code>${quantity}</code></li>
+          <li>Weight : <code>${weight}</code></li>
           <li>Shipment Type : <code>${shipmentType}</code></li>
           <li>COD Amount : <code>${cod} SAR</code></li>
         </ul>
@@ -903,24 +915,28 @@ export const buildCompanyShipEmailBody = ({
   senderPhone,
   originAddressArabic,
   originAddressEnglish,
+  originNationalAddress,
 
   // Receiver
   receiverName,
-  destinationAddressArabic,
-  destinationAddressEnglish,
   receiverEmail,
   receiverPhone,
+  destinationAddressArabic,
+  destinationAddressEnglish,
+  destinationNationalAddress,
 
   // Shipment Details
   referenceNumber,
   shipmentId,
   trackingId,
   barcodeImageUrl,
+  serviceType,
   shipmentType,
   cod,
   description,
   notes,
   quantity,
+  weight,
 }: {
   //Sender Details
   senderName: string;
@@ -928,6 +944,7 @@ export const buildCompanyShipEmailBody = ({
   senderPhone: string;
   originAddressArabic: string;
   originAddressEnglish: string;
+  originNationalAddress: string | null | undefined;
 
   // Receiver Details
   receiverName: string;
@@ -935,6 +952,7 @@ export const buildCompanyShipEmailBody = ({
   receiverPhone: string;
   destinationAddressArabic: string;
   destinationAddressEnglish: string;
+  destinationNationalAddress?: string | null | undefined;
 
   // Shipment Details
   referenceNumber: string;
@@ -946,6 +964,8 @@ export const buildCompanyShipEmailBody = ({
   description: string;
   notes: string;
   quantity: string | number;
+  weight: string | number;
+  serviceType: string;
 }) => {
   return `<main>
   <section>
@@ -1052,6 +1072,14 @@ export const buildCompanyShipEmailBody = ({
             <span class="translation"> ${originAddressEnglish} </span>
           </td>
         </tr>
+
+        <tr>
+        <td>
+         عنوان وطني - المصدر
+          <span class="translation">(Origin National Address)</span>
+        </td>
+        <td>${originNationalAddress}</td>
+      </tr>
       </tbody>
     </table>
   </section>
@@ -1103,6 +1131,13 @@ export const buildCompanyShipEmailBody = ({
             <span class="translation"> (${destinationAddressEnglish}) </span>
           </td>
         </tr>
+        <tr>
+          <td>
+           عنوان وطني - الوجهة
+            <span class="translation">(Destination National Address)</span>
+          </td>
+          <td>${destinationNationalAddress}</td>
+        </tr>
       </tbody>
     </table>
   </section>
@@ -1125,6 +1160,13 @@ export const buildCompanyShipEmailBody = ({
         </tr>
         <tr>
           <td>
+           نوع الخدمة
+            <span class="translation">(Service Type)</span>
+          </td>
+          <td>${serviceType}</td>
+        </tr>
+        <tr>
+          <td>
             مبلغ الدفع عند الاستلام
             <span class="translation">(COD Amount)</span>
           </td>
@@ -1136,6 +1178,13 @@ export const buildCompanyShipEmailBody = ({
             <span class="translation">(Quantity)</span>
           </td>
           <td>${quantity}</td>
+        </tr>
+        <tr>
+          <td>
+           الوزن
+            <span class="translation">(Weight)</span>
+          </td>
+          <td>${weight}</td>
         </tr>
         <tr>
           <td>

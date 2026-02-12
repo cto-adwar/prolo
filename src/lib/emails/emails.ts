@@ -146,6 +146,10 @@ export const buildShipmentEmails = ({
   locales: "en" | "ar";
   data: CreateShipmentFormData;
 }): ShipmentEmailBuilds => {
+  // Specify The Service Type based ON ID
+  const serviceType: string =
+    Number(data.serviceTypeId) === 342 ? "COLD" : Number(data.serviceTypeId) === 341 ? "DRY" : "-";
+
   // Sender Email
   const senderEmailSubject =
     locales === "en"
@@ -157,6 +161,7 @@ export const buildShipmentEmails = ({
     footer: getEmailFooter(locales),
     body: buildSenderShipEmailBody(locales, {
       ...data,
+      serviceType,
       destinationAddress:
         locales === "en" ? data.destinationAddressEnglish : data.destinationAddressArabic,
     }),
@@ -179,11 +184,17 @@ export const buildShipmentEmails = ({
 
   // Company Email
   const companyEmailSubject = "إنشاء شحنة جديدة | New Shipment Created";
+
   const companyEmail = buildEmailBody({
     locale: "ar",
     header: getEmailHeader("ar"),
     footer: getEmailFooter("ar"),
-    body: buildCompanyShipEmailBody({ ...data }),
+    body: buildCompanyShipEmailBody({
+      ...data,
+      serviceType,
+      originNationalAddress: data.originNationalAddress || "-",
+      destinationNationalAddress: data.destinationNationalAddress || "-",
+    }),
   });
 
   return {
