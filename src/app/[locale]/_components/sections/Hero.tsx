@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="#hero"
-      className="sm:py-auto relative z-1 flex h-dvh w-full flex-col items-center justify-center py-16 text-white"
+      className="sm:py-auto relative z-1 flex h-dvh max-h-[610px] w-full flex-col items-center justify-center py-16 text-white"
     >
       {/* Overlay */}
       <div className="absolute inset-0 h-full w-full">
