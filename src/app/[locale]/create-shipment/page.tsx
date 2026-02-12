@@ -31,7 +31,7 @@ export default async function createShipmentPage() {
       />
 
       {/* Notice */}
-      <div className="prolo-container py-6">
+      {/* <div className="prolo-container py-6">
         <h2 className="text-2xl font-bold">⚠️ System Notice</h2>
         <p>We are currently testing the Create Shipment feature.</p>
         <p>Please do not attempt to create shipments at the moment.</p>
@@ -41,7 +41,7 @@ export default async function createShipmentPage() {
         </h2>
         <p dir="rtl">نحن حالياً نقوم باختبار ميزة إنشاء الشحنات.</p>
         <p dir="rtl">يرجى عدم محاولة إنشاء شحنات في الوقت الحالي.</p>
-      </div>
+      </div> */}
       <div className="prolo-container">
         <CreateShipmentForm />
       </div>

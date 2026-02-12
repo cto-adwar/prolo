@@ -101,11 +101,15 @@
       "originCityId": {
         "label": "المدينة",
         "placeholder": "اختر المدينة",
+        "search": "بحث",
+        "noResult": "لا توجد نتائج",
         "error": "المدينة مطلوبة"
       },
       "originVillageId": {
         "label": "الحي",
         "placeholder": "اختر الحي",
+        "search": "بحث",
+        "noResult": "لا توجد نتائج",
         "error": "الحي مطلوبة"
       },
       "originAddressLine1": {
@@ -137,11 +141,15 @@
       "destinationCityId": {
         "label": "المدينة",
         "placeholder": "اختر المدينة",
+        "search": "بحث",
+        "noResult": "لا توجد نتائج",
         "error": "المدينة مطلوبة"
       },
       "destinationVillageId": {
         "label": "الحي",
         "placeholder": "اختر الحي",
+        "search": "بحث",
+        "noResult": "لا توجد نتائج",
         "error": "الحي مطلوبة"
       },
       "destinationAddressLine1": {

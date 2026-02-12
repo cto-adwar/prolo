@@ -107,11 +107,15 @@
       "originCityId": {
         "label": "City",
         "placeholder": "Select city",
+        "search": "Search",
+        "noResult": "No Result",
         "error": "City is required"
       },
       "originVillageId": {
         "label": "District / Area",
         "placeholder": "Select District/Area",
+        "search": "Search",
+        "noResult": "No Result",
         "error": "District/Area is required"
       },
       "originAddressLine1": {
@@ -143,11 +147,15 @@
       "destinationCityId": {
         "label": "City",
         "placeholder": "Select city",
+        "search": "Search",
+        "noResult": "No Result",
         "error": "City is required"
       },
       "destinationVillageId": {
         "label": "District / Area",
         "placeholder": "Select District/Area",
+        "search": "Search",
+        "noResult": "No Result",
         "error": "District/Area is required"
       },
       "destinationAddressLine1": {

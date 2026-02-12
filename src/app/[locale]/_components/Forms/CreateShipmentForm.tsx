@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Input, Select, Textarea, ButtonClient } from "../components";
+import { Input, Select, Textarea, ButtonClient, SearchSelect } from "../components";
 import { useMessages } from "next-intl";
 import { useLocale, useTranslations } from "use-intl";
 import englishAddresses from "@/adresses/english.json";
@@ -345,24 +345,35 @@ export default function CreateShipmentForm() {
               {legends?.originAddress}
             </legend>
             <div className="form-grid">
-              <Select
+              {/* Origitn City */}
+              <SearchSelect
                 icon="solar:city-outline"
                 label={messages.originCityId.label}
                 id="originCityId"
                 options={cities}
                 placeholder={messages.originCityId.placeholder}
+                searchText={messages.originCityId.search}
+                noResult={messages.originCityId.noResult}
                 registerProps={{ ...register("originCityId", { required: true }) }}
                 error={errors.originCityId && messages.originCityId.error}
+                setValue={setValue}
+                name={"originCityId"}
               />
 
-              <Select
+              {/* Origin Village */}
+              <SearchSelect
                 icon="fontisto:holiday-village"
                 label={messages.originVillageId.label}
                 id="originVillageId"
                 options={originVillages}
                 placeholder={messages.originVillageId.placeholder}
+                searchText={messages.originVillageId.search}
+                noResult={messages.originVillageId.noResult}
                 registerProps={{ ...register("originVillageId", { required: true }) }}
                 error={errors.originVillageId && messages.originVillageId.error}
+                setValue={setValue}
+                name={"originVillageId"}
+                resetKey={originCityId}
               />
 
               <Input
@@ -429,24 +440,35 @@ export default function CreateShipmentForm() {
               {legends?.destinationAddress}
             </legend>
             <div className="form-grid">
-              <Select
+              {/* Destination City */}
+              <SearchSelect
                 icon="solar:city-outline"
                 label={messages.destinationCityId.label}
                 id="destinationCityId"
                 options={cities}
                 placeholder={messages.destinationCityId.placeholder}
+                searchText={messages.destinationCityId.search}
+                noResult={messages.destinationCityId.noResult}
                 registerProps={{ ...register("destinationCityId", { required: true }) }}
                 error={errors.destinationCityId && messages.destinationCityId.error}
+                setValue={setValue}
+                name="destinationCityId"
               />
 
-              <Select
+              {/* Destination Village Id */}
+              <SearchSelect
                 icon="fontisto:holiday-village"
                 label={messages.destinationVillageId.label}
                 id="destinationVillageId"
                 options={destinationVillages}
                 placeholder={messages.destinationVillageId.placeholder}
+                searchText={messages.destinationVillageId.search}
+                noResult={messages.destinationVillageId.noResult}
                 registerProps={{ ...register("destinationVillageId", { required: true }) }}
                 error={errors.destinationVillageId && messages.destinationVillageId.error}
+                setValue={setValue}
+                name="destinationVillageId"
+                resetKey={destinationCityId}
               />
 
               <Input
