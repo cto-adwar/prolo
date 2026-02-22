@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="#hero"
-      className="sm:py-auto relative z-1 flex h-dvh max-h-[610px] w-full flex-col items-center justify-center py-16 text-white"
+      className="sm:py-auto relative z-1 flex w-full flex-col items-center justify-center text-white"
     >
       {/* Overlay */}
       <div className="absolute inset-0 h-full w-full">
@@ -21,17 +21,17 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="prolo-container relative z-2 flex h-auto w-full flex-col items-center justify-between gap-8 sm:gap-12 md:gap-16">
+      <div className="prolo-container relative z-2 flex h-auto w-full flex-col items-center justify-between gap-8 pt-23 pb-12 sm:gap-12 md:gap-12">
         <div>
           {/* Top - title */}
-          <h2 className="mx-auto text-center text-2xl/tight font-bold text-white sm:w-[60%] sm:text-3xl/tight">
-            {t("hero.title.first")} <span className="text-theme-blue">{t("hero.title.mid")}</span>{" "}
+          <h2 className="mx-auto text-center text-2xl/tight font-bold text-white sm:w-[60%] sm:text-4xl/tight">
+            {t("hero.title.first")} <span className="">{t("hero.title.mid")}</span>{" "}
             {t("hero.title.last")}
           </h2>
         </div>
 
         {/* Buttom & Input */}
-        <div className="hidden w-full max-w-[800px] sm:block sm:w-[90%]">
+        <div className="mt-12 hidden w-full max-w-[800px] sm:block sm:w-[90%]">
           {/* Button */}
           <Button
             text={ctas("createShipment")}

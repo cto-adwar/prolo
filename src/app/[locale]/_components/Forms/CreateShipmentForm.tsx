@@ -8,17 +8,11 @@ import { useLocale, useTranslations } from "use-intl";
 import englishAddresses from "@/adresses/english.json";
 import arbicAddresses from "@/adresses/arabic.json";
 import { useRouter } from "next/navigation";
-import type {
-  CreateShipmentFormInputs,
-  PaymentLinkTranslation,
-  SaveFormAndPaymentReqBody,
-} from "@/lib/types";
+import type { ApiError, CreateShipmentFormData, CreateShipmentFormInputs } from "@/lib/types";
 import axios from "axios";
-import { createShipmentReference } from "./utils/createShipmentReferece";
-import { getLinkExpiryDate } from "./utils/getLinkExpiryDate";
-import { getPaymentLink } from "./utils/getPaymentLink";
-import PolicyPopup from "../PolicyPopup";
 import { Icon } from "@iconify/react";
+import PolicyPdf from "../PolicyPdf";
+import { ShipmentResponse } from "@/lib/types";
 
 const BASE_CITY_RATE = 35;
 const INTERCITY_RATE = 75;
@@ -53,7 +47,7 @@ export default function CreateShipmentForm() {
     { value: "REGULAR", name: "PREPAID" },
   ];
 
-  const serviceTypeIdOptions = [
+  const parcelTypeIdOptions = [
     { value: "342", name: "COLD" },
     { value: "341", name: "DRY" },
   ];
@@ -80,7 +74,8 @@ export default function CreateShipmentForm() {
       "destinationVillageId",
       "destinationAddressLine1",
     ],
-    3: ["cod", "notes", "shipmentType", "quantity", "description"],
+    3: ["cod", "notes", "shipmentType", "quantity", "description", "parcelTypeId"],
+    4: ["policyAccepted"],
   };
 
   // STEP CONTROLLERS
@@ -99,8 +94,7 @@ export default function CreateShipmentForm() {
   const messages = messagesData.forms.fields;
   const legends = messagesData.forms.legends;
   const formSteps: string[] = messagesData.createShipmentPage.formSteps;
-  const loadingText = messagesData.createShipmentPage.loadingText as string;
-  const paymentLinkMessages = messagesData.createShipmentPage.paymentLink as PaymentLinkTranslation;
+  const loadingText = messagesData.createShipmentPage.shipmentLoadingText as string;
 
   // ADDRESS DATA & DEPENDENCIES
   const addresses = isEn ? englishAddresses : arbicAddresses;
@@ -211,77 +205,82 @@ export default function CreateShipmentForm() {
     }
   }, [shipmentType, setValue]);
 
-  // FORM SUBMISSION & PAYMENT LINK GENERATION
-  const [paymentLink, setPaymentLink] = useState("");
-  const [notifyEmail, setNotifyEmail] = useState("");
-  const [amount, setAmount] = useState(0);
-
-  const visitPaymentLink = (link: string) => {
-    return router.push(link);
-  };
   // HANDLE FORM SUBMISSION
   const onSubmit: SubmitHandler<CreateShipmentFormInputs> = async data => {
     if (!data.policyAccepted) {
       return;
     }
 
+    setLoader(true);
+    // Inputs For Create Shipment
+    const shipmentPayload: CreateShipmentFormInputs = data;
+
+    const shipmentApiRes = await axios.post("/api/create-shipment", shipmentPayload);
+
+    const dataInResponse: ApiError | ShipmentResponse = shipmentApiRes.data;
+
+    if ("error" in dataInResponse) {
+      router.push(`/${locale}/create-shipment/failure`);
+      return;
+    }
+
     // Generate & Calculate Some Variables
-    const referenceNumber = createShipmentReference(locale as "en" | "ar");
-    const linkExpiry = getLinkExpiryDate(2);
+    // const referenceNumber = createShipmentReference(locale as "en" | "ar");
+
     const shipmentAmount =
       data.originCityId === data.destinationCityId ? BASE_CITY_RATE : INTERCITY_RATE;
     const weightOver10 =
       parseFloat(data.weight as string) > 10 ? parseFloat(data.weight as string) - FREE_WEIGHT : 0;
-    setAmount(shipmentAmount + weightOver10);
 
-    // Generate Link
-    setLoader(true);
+    // Save Shipment Data & Payment Link
 
-    const paymentLinkResponse = await getPaymentLink({
-      firstName: data.senderName,
-      email: data.senderEmail,
-      urlExpiry: linkExpiry,
-      referenceNumber: referenceNumber,
-      amount: shipmentAmount + weightOver10,
-      currency: "SAR",
-      reportingField1: `Payment For ${referenceNumber}`,
-    });
+    // Build addresses
+    const originAddr = getAddresses(data.originVillageId);
+    const destAddr = getAddresses(data.destinationVillageId);
 
-    if (paymentLinkResponse && paymentLinkResponse !== null) {
-      setPaymentLink(paymentLinkResponse.paymentLink.paymentLink);
-      setNotifyEmail(data.senderEmail);
+    const shipmentData: CreateShipmentFormData = {
+      // Shipment
+      shipmentId: dataInResponse.id,
+      trackingId: dataInResponse.barcode,
+      barcodeImageUrl: dataInResponse.barcodeImage,
+      cod: data.cod,
+      parcelTypeId: dataInResponse.parcelTypeId,
+      shipmentType: data.shipmentType as "COD" | "REGULAR",
+      quantity: data.quantity,
+      weight: data.weight || 0,
+      notes: data.notes,
+      description: data.description,
+      expectedDeliveryDate: dataInResponse.expectedDeliveryDate,
+      amount: shipmentAmount + weightOver10, //Shipment Charges Collected Saperately
 
-      // Save Shipment Data & Payment Link
+      // Sender
+      senderName: data.senderName,
+      senderEmail: data.senderEmail,
+      senderBusinessName: data.businessSenderName,
+      senderPhone: data.senderPhone,
+      originAddressArabic: `${data.originAddressLine1}, ${originAddr.arabicAddress}`,
+      originAddressEnglish: `${data.originAddressLine1}, ${originAddr.englishAddress}`,
+      originNationalAddress: data.originNationalAddress,
 
-      // Build addresses
-      const originAddr = getAddresses(data.originVillageId);
-      const destAddr = getAddresses(data.destinationVillageId);
+      // Receiver
+      receiverName: data.receiverName,
+      receiverEmail: data.receiverEmail,
+      receiverPhone: data.receiverPhone,
+      destinationAddressArabic: `${data.destinationAddressLine1}, ${destAddr.arabicAddress}`,
+      destinationAddressEnglish: `${data.destinationAddressLine1}, ${destAddr.englishAddress}`,
+      destinationNationalAddress: data.destinationNationalAddress,
+    };
 
-      const reqBody: SaveFormAndPaymentReqBody = {
-        formData: {
-          ...data,
-          destinationAddressArabic: `${data.destinationAddressLine1}, ${destAddr.arabicAddress}`,
-          destinationAddressEnglish: `${data.destinationAddressLine1}, ${destAddr.englishAddress}`,
-          originAddressArabic: `${data.originAddressLine1}, ${originAddr.arabicAddress}`,
-          originAddressEnglish: `${data.originAddressLine1}, ${originAddr.englishAddress}`,
-          paymentLinkId: paymentLinkResponse.id,
-          referenceNumber: referenceNumber,
-          locale: locale as "en" | "ar",
-        },
-        paymentLink: paymentLinkResponse,
-      };
-
-      await axios.post("/api/save-form-and-payment-data", reqBody);
-      setLoader(false);
-      nextStep();
+    // Saving Shipment Data & Sending Email
+    try {
+      await axios.post("/api/save-shipment", { locales: locale, data: shipmentData });
+    } catch (error) {
+      console.log("Error in saving shipment :: ", error);
     }
 
-    if (!paymentLinkResponse || paymentLinkResponse === null) {
-      setLoader(false);
-      nextStep();
-    }
-
-    return;
+    router.push(
+      `/${locale}/create-shipment/success?id=${shipmentData.shipmentId}&barcode=${shipmentData.trackingId}`
+    );
   };
 
   if (loader) {
@@ -296,7 +295,7 @@ export default function CreateShipmentForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-full space-y-6">
       {/* Step Indicator */}
-      <div className="mb-6 grid grid-cols-4">
+      <div className="mb-6 grid grid-cols-3">
         {formSteps.map((label, index) => (
           <div
             key={index}
@@ -535,12 +534,12 @@ export default function CreateShipmentForm() {
           {/* Service Type Id */}
           <Select
             icon="hugeicons:container-truck"
-            label={messages.serviceType.label + ` *`}
-            id="serviceType"
-            options={serviceTypeIdOptions}
-            placeholder={messages.serviceType.placeholder}
-            registerProps={{ ...register("serviceTypeId", { required: true }) }}
-            error={errors.serviceTypeId && messages.serviceType.error}
+            label={messages.parcelTypeId.label + ` *`}
+            id="parcelTypeId"
+            options={parcelTypeIdOptions}
+            placeholder={messages.parcelTypeId.placeholder}
+            registerProps={{ ...register("parcelTypeId", { required: true }) }}
+            error={errors.parcelTypeId && messages.parcelTypeId.error}
           />
 
           <Select
@@ -607,9 +606,17 @@ export default function CreateShipmentForm() {
               registerProps={{ ...register("description", { required: false }) }}
             />
           </div>
+        </div>
+      )}
 
+      {/* -------------------- STEP 4 -------------------- */}
+      {step === 4 && (
+        <div className="w-full">
+          <div className="h-[600px] w-full">
+            <PolicyPdf />
+          </div>
           {/* Policy Section */}
-          <div className="flex w-full items-center gap-0">
+          <div className="mt-4 flex w-full items-center gap-0">
             <input
               type="hidden"
               {...register("policyAccepted", {
@@ -622,70 +629,28 @@ export default function CreateShipmentForm() {
             >
               {policyAccepted && <Icon icon="hugeicons:tick-01" className="size-full" />}
             </div>
-            <p className="mx-2 flex items-center gap-1">
-              {messages.policy}
-              <PolicyPopup className="text-theme-blue font-medium underline" />
-            </p>
+            <div className="mx-2 flex items-center gap-1">
+              <p>{messages.policy.label}</p>
+            </div>
           </div>
         </div>
-      )}
-
-      {/* -------------------- STEP 4 -------------------- */}
-      {step === 4 && paymentLink ? (
-        <div className="mx-auto w-full max-w-[600px] p-4">
-          <h3 className="font-capitalize mb-4 text-center text-xl font-medium">
-            {paymentLinkMessages.linkGenerated}
-          </h3>
-          <h3 className="font-capitalize mb-4 text-center text-xl font-medium">
-            {amount} {paymentLinkMessages.amountToPay}
-          </h3>
-          <p className="my-2">{paymentLinkMessages.expiryNotice}</p>
-          <p>{paymentLinkMessages.successNote}</p>
-          <ul>
-            <li>{paymentLinkMessages.shipmentCreated}</li>
-            <li>
-              {paymentLinkMessages.emailNotification}
-              <span className="font-medium">{notifyEmail}</span>
-            </li>
-          </ul>
-          <p className="mt-2 mb-4">{paymentLinkMessages.supportNote}</p>
-          <div className="flex items-center justify-center">
-            <ButtonClient
-              type="button"
-              text={paymentLinkMessages.payNow}
-              icon={false}
-              className="rounded-x bg-theme-blue hover:bg-blue-hover text-white"
-              onClick={() => visitPaymentLink(paymentLink)}
-            />
-          </div>
-        </div>
-      ) : (
-        step === 4 && (
-          <div className="mx-auto w-full max-w-[600px] p-4">
-            <h3 className="font-capitalize mb-4 text-center text-xl font-medium text-red-600">
-              {paymentLinkMessages.failedTitle}
-            </h3>
-            <p className="text-center">{paymentLinkMessages.failedMessage}</p>
-          </div>
-        )
       )}
 
       {/* Navigation Buttons */}
       <div className="mt-6 flex justify-between">
         {step > 1 && (
           <ButtonClient
-            disabled={step === 4}
+            disabled={step === 5}
             type="button"
             text={ctas("back")}
             icon={false}
-            className={`rounded-xl bg-gray-300 text-black ${step === 4 ? "hidden" : ""}`}
+            className={`rounded-xl bg-gray-300 text-black ${step === 5 ? "hidden" : ""}`}
             onClick={prevStep}
           />
         )}
 
-        {step < 3 && (
+        {step < 4 && (
           <ButtonClient
-            disabled={step === 4}
             type="button"
             text={ctas("next")}
             icon={false}
@@ -695,14 +660,16 @@ export default function CreateShipmentForm() {
         )}
 
         {/* Policy Confirmation */}
-        {step === 3 && (
+        {step === 4 && (
           <ButtonClient
             type="submit"
-            text={ctas("checkout")}
+            text={ctas("createShipment")}
             icon={false}
             disabled={!policyAccepted}
             className={`rounded-xl text-white ${
-              policyAccepted ? "bg-green-500" : "cursor-not-allowed bg-gray-400"
+              policyAccepted
+                ? "bg-theme-blue hover:bg-blue-hover"
+                : "cursor-not-allowed bg-gray-400"
             }`}
           />
         )}

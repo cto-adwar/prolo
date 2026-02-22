@@ -147,8 +147,17 @@ export const buildShipmentEmails = ({
   data: CreateShipmentFormData;
 }): ShipmentEmailBuilds => {
   // Specify The Service Type based ON ID
-  const serviceType: string =
-    Number(data.serviceTypeId) === 342 ? "COLD" : Number(data.serviceTypeId) === 341 ? "DRY" : "-";
+
+  console.log("Data in Emails.ts");
+
+  console.log(data);
+
+  const parcelType: string =
+    data?.parcelTypeId && Number(data?.parcelTypeId) === 342
+      ? "COLD"
+      : Number(data?.parcelTypeId) === 341
+        ? "DRY"
+        : "---";
 
   // Sender Email
   const senderEmailSubject =
@@ -161,9 +170,9 @@ export const buildShipmentEmails = ({
     footer: getEmailFooter(locales),
     body: buildSenderShipEmailBody(locales, {
       ...data,
-      serviceType,
+      parcelType,
       destinationAddress:
-        locales === "en" ? data.destinationAddressEnglish : data.destinationAddressArabic,
+        locales === "en" ? data?.destinationAddressEnglish : data?.destinationAddressArabic,
     }),
   });
 
@@ -178,7 +187,7 @@ export const buildShipmentEmails = ({
     body: buildReceiverShipEmailBody(locales, {
       ...data,
       destinationAddress:
-        locales === "en" ? data.destinationAddressEnglish : data.destinationAddressArabic,
+        locales === "en" ? data?.destinationAddressEnglish : data?.destinationAddressArabic,
     }),
   });
 
@@ -191,9 +200,9 @@ export const buildShipmentEmails = ({
     footer: getEmailFooter("ar"),
     body: buildCompanyShipEmailBody({
       ...data,
-      serviceType,
-      originNationalAddress: data.originNationalAddress || "-",
-      destinationNationalAddress: data.destinationNationalAddress || "-",
+      parcelType,
+      originNationalAddress: data?.originNationalAddress || "-",
+      destinationNationalAddress: data?.destinationNationalAddress || "-",
     }),
   });
 

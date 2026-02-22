@@ -102,6 +102,8 @@ export async function POST(req: Request) {
               expectedDeliveryDate: (shipmentResponse as ShipmentResponse).expectedDeliveryDate,
               senderBusinessName: formData[0].businessSenderName,
               shipmentType: formData[0].shipmentType as "COD" | "REGULAR",
+              // TODO: Set Right Amount Here
+              amount: 0,
             },
           });
 
@@ -115,6 +117,8 @@ export async function POST(req: Request) {
             expectedDeliveryDate: (shipmentResponse as ShipmentResponse).expectedDeliveryDate,
             senderBusinessName: formData[0].businessSenderName,
             shipmentType: formData[0].shipmentType as "COD" | "REGULAR",
+            // TODO: Set Right Amount Here
+            amount: 0,
           });
         } else {
           throw new Error("Error Getting Form Data From Firebase");

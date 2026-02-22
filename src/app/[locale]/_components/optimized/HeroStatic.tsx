@@ -15,9 +15,9 @@ export default function HeroStatic() {
         unoptimized
       />
 
-      <div className="absolute top-15 right-4 w-25 md:top-18 md:w-30">
+      {/* <div className="absolute top-15 right-4 w-25 md:top-18 md:w-30">
         <Image src={"/logo-white.svg"} alt="" width={160} height={80} className="h-auto w-full" />
-      </div>
+      </div> */}
       <div className="absolute inset-0 z-2 bg-black/10"></div>
     </div>
   );

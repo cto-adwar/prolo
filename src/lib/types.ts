@@ -83,7 +83,7 @@ export type ShipmentRequest = {
     receiverPhone: string; // required
     receiverPhone2?: string;
     serviceType: "STANDARD"; // required
-    serviceTypeId?: string | number | null | undefined;
+    parcelTypeId?: string | number | null | undefined;
     shipmentType: "COD" | "REGULAR" | "SWAP" | "BRING"; // required
     quantity?: number | string;
     weight: number;
@@ -143,7 +143,7 @@ export type CreateShipmentFormInputs = {
   shipmentType: string;
   quantity: string;
   description: string;
-  serviceTypeId?: string | number | null | undefined;
+  parcelTypeId?: string | number | null | undefined;
   weight: string | number;
 
   // Step 4 Policy Accepted
@@ -160,7 +160,7 @@ export type ShipmentResponse = {
   expectedDeliveryDate: string;
   senderPhone: string;
   receiverPhone: string;
-  serviceTypeId?: string | number | null | undefined;
+  parcelTypeId?: string | number | null | undefined;
   quantity: null | number | string;
   weight: null | number | string;
 
@@ -207,6 +207,7 @@ export type CreateShipmentFormData = {
   // Sender
   senderName: string;
   senderEmail: string;
+  senderPhone: string;
   senderBusinessName: string;
   originAddressArabic: string;
   originAddressEnglish: string;
@@ -224,19 +225,19 @@ export type CreateShipmentFormData = {
   // destinationAddress: string;
 
   // Shipment
-  referenceNumber: string;
+  referenceNumber?: string;
   shipmentId: string | number;
   trackingId: string | number;
   barcodeImageUrl: string;
   cod: string | number;
-  senderPhone: string;
-  serviceTypeId?: string | number | null | undefined;
+  parcelTypeId?: string | number | null | undefined;
   shipmentType: "COD" | "REGULAR";
   quantity: number | string;
   weight: number | string;
   notes: string;
   description: string;
   expectedDeliveryDate: string;
+  amount: string | number;
 };
 
 export type Addresses = {

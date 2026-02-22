@@ -19,7 +19,7 @@ export const buildShipmentRequest = (form: CreateShipmentFormInputs): ShipmentRe
       quantity: Number(form.quantity) || 1,
       description: form.description || "",
       weight: Number(form.weight),
-      serviceTypeId: Number(form.serviceTypeId),
+      parcelTypeId: Number(form.parcelTypeId),
     },
 
     originAddress: {

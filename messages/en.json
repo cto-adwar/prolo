@@ -192,10 +192,10 @@
         "label": "Track Your Shipment",
         "placeholder": "Enter your tracking number"
       },
-      "serviceType": {
-        "label": "Service Type",
-        "placeholder": "Select Service Type",
-        "error": "Service type is required"
+      "parcelTypeId": {
+        "label": "Parcel Type",
+        "placeholder": "Select Parcel Type",
+        "error": "Parcel type is required"
       },
       "originNationalAddress": {
         "label": "National Address (Optional)",
@@ -212,7 +212,10 @@
         "placeholder": "Enter package weight",
         "error": "Weight is required"
       },
-      "policy": "By clicking this I agree to"
+      "policy": {
+        "label": "By clicking this I agree to Complaints & Compensation Policy",
+        "error": "Complaints & Compensation Policy Must be accepted"
+      }
     },
     "messages": {
       "subscription": "Thank you for subscribing!",
@@ -354,7 +357,7 @@
       "ourSupport": "our support",
       "last": "team for quick help."
     },
-    "formSteps": ["Sender Details", "Receiver Details", "Shipment Details", "Checkout"],
+    "formSteps": ["Sender Details", "Receiver Details", "Shipment Details"],
     "success": {
       "title": "Your shipment has been successfully created 🎉",
       "bookmarkNotice": "☆ Bookmark This Link",
@@ -377,6 +380,7 @@
       }
     },
     "loadingText": "Generating Payment Link",
+    "shipmentLoadingText": "Creating Your Shipment 📦",
     "paymentLink": {
       "linkGenerated": "✅ Your payment link has been generated.",
       "amountToPay": "SAR to pay",
