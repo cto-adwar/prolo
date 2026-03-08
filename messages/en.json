@@ -23,7 +23,7 @@
   },
   "forms": {
     "placeholders": {
-      "tracking": "Enter tracking ID",
+      "tracking": "Enter Tracking ID",
       "email": "Enter Your Email",
       "error": "Email is required"
     },
