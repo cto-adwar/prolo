@@ -1,33 +1,11 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Input, SelectServices, Textarea, ButtonClient, Select } from "../components";
+import { Input, Textarea, ButtonClient, Select } from "../components";
 import { useLocale, useMessages } from "next-intl";
 import axios from "axios";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { Controller } from "react-hook-form";
-
-type Services = {
-  individualServices: {
-    title: string;
-    links: { text: string; link: string; slug: string }[];
-  };
-  commercialSectorServices: {
-    title: string;
-    links: { text: string; link: string; slug: string }[];
-  };
-};
-
-type ServicesOptions = {
-  individualServices: {
-    title: string;
-    services: { text: string; value: string }[];
-  };
-  commercialSectorServices: {
-    title: string;
-    services: { text: string; value: string }[];
-  };
-};
 
 type Inputs = {
   name: string;
@@ -101,63 +79,10 @@ type FormMessages = {
 };
 
 export default function GetAQuoteForm() {
-  const getServices = (services: Services): ServicesOptions => {
-    const individualServices = {
-      title: services.individualServices.title,
-      services: services.individualServices.links.map(link => {
-        return { text: link.text, value: link.slug };
-      }),
-    };
-    const commercialSectorServices = {
-      title: services.commercialSectorServices.title,
-      services: services.commercialSectorServices.links.map(link => {
-        return { text: link.text, value: link.slug };
-      }),
-    };
-
-    return { individualServices, commercialSectorServices };
-  };
   const messages = useMessages();
-  const servicesLinks = messages.links.services as Services;
-  const services = getServices(JSON.parse(JSON.stringify(servicesLinks)));
   const formMessages = messages.forms as FormMessages;
   const fileds: FormFields = formMessages.fields;
   const quoteServiceOptions = formMessages.fields.service.quoteOptions || [];
-
-  const getSelectedService = (slug: string | undefined) => {
-    const getServiceText = (slug: string, text: string) => {
-      const serviceType =
-        slug.split("-")[0] === "individual"
-          ? services.individualServices.title
-          : slug.split("-")[0] === "commercial"
-            ? services.commercialSectorServices.title
-            : "";
-
-      if (serviceType) {
-        return `${text} (${serviceType})`;
-      } else {
-        return text;
-      }
-    };
-    if (slug) {
-      const service = [
-        ...servicesLinks.individualServices.links,
-        ...servicesLinks.commercialSectorServices.links,
-      ].find(link => link.slug === slug);
-
-      if (service) {
-        return {
-          value: service.slug,
-          text: getServiceText(service.slug, service.text),
-        };
-      }
-    }
-
-    return {
-      value: "",
-      text: "",
-    };
-  };
 
   const {
     register,

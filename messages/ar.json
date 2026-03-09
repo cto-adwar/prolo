@@ -2055,7 +2055,7 @@
       "title": "روابط سريعة",
       "links": [
         { "text": "تتبع الشحنة", "link": "/tracking" },
-        { "text": "إنشاء شحنة", "link": "/create-shipment" },
+        { "text": "احصل على عرض سعر", "link": "/get-a-quote" },
         { "text": "مدونات", "link": "/blogs" },
         { "text": "اتصل بنا", "link": "/contact" }
       ]
@@ -2413,6 +2413,10 @@
         "text": "اشحن طلبك",
         "link": "/create-shipment"
       }
+    },
+    "getAQuote": {
+      "text": "احصل على عرض سعر",
+      "link": "/get-a-quote"
     },
     "blogs": {
       "link": "/blogs",

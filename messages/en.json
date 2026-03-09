@@ -2074,7 +2074,7 @@
       "title": "Quick Links",
       "links": [
         { "text": "Track Shipment", "link": "/tracking" },
-        { "text": "Create Shipment", "link": "/create-shipment" },
+        { "text": "Get A Quote", "link": "/get-a-quote" },
         { "text": "Blog & Insights", "link": "/blogs" },
         { "text": "Contact Us", "link": "/contact" }
       ]
@@ -2386,6 +2386,10 @@
         "text": "Ship Now",
         "link": "/create-shipment"
       }
+    },
+    "getAQuote": {
+      "text": "Get A Quote",
+      "link": "/get-a-quote"
     },
     "blogs": {
       "text": "Blogs",
