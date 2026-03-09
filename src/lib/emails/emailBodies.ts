@@ -446,6 +446,9 @@ export const buildCompanyQuoteEmailBody = ({
   name,
   email,
   phone,
+  company,
+  expectedOrders,
+  crnumber,
   address,
   details,
 }: {
@@ -454,7 +457,10 @@ export const buildCompanyQuoteEmailBody = ({
   email: string;
   address: string;
   phone: string;
-  details: string;
+  company: string;
+  expectedOrders: string;
+  crnumber: string;
+  details?: string;
 }) => {
   return `<main>
   <section>
@@ -499,6 +505,15 @@ export const buildCompanyQuoteEmailBody = ({
         </tr>
 
         <tr>
+          <td>الشركة (Company)</td>
+          <td>${company}</td>
+        </tr>
+        
+        <tr>
+          <td>رقم السجل التجاري (CR Number)</td>
+          <td class="blue">${crnumber}</td>
+        </tr>
+        <tr>
           <td>العنوان (Address)</td>
           <td>${address}</td>
         </tr>
@@ -506,7 +521,10 @@ export const buildCompanyQuoteEmailBody = ({
           <td>خدمة (Service)</td>
           <td class="blue">${service}</td>
         </tr>
-
+        <tr>
+          <td>الطلبات الشهرية المتوقعة (Expected Monthly Orders)</td>
+          <td class="blue">${expectedOrders}</td>
+        </tr>
         <tr>
           <td>تفاصيل إضافية (Additional Details)</td>
           <td>${details}</td>

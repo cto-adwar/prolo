@@ -200,7 +200,10 @@ export type GetAQuoteFormData = {
   phone: string;
   address: string;
   service: string;
-  details: string;
+  crnumber: string;
+  company: string;
+  expectedOrders: string;
+  details?: string;
 };
 
 export type CreateShipmentFormData = {

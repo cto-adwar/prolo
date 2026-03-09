@@ -1,9 +1,11 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Input, SelectServices, Textarea, ButtonClient } from "../components";
+import { Input, SelectServices, Textarea, ButtonClient, Select } from "../components";
 import { useLocale, useMessages } from "next-intl";
 import axios from "axios";
 import { useState } from "react";
+import { Icon } from "@iconify/react";
+import { Controller } from "react-hook-form";
 
 type Services = {
   individualServices: {
@@ -33,7 +35,10 @@ type Inputs = {
   phone: string;
   service: string;
   address: string;
+  crnumber: string;
+  company: string;
   details: string;
+  expectedOrders: string;
 };
 
 type FormFields = {
@@ -52,10 +57,27 @@ type FormFields = {
     placeholder: string;
     error: string;
   };
+  company: {
+    label: string;
+    placeholder: string;
+    error: string;
+  };
+  crnumber: {
+    label: string;
+    placeholder: string;
+    error: string;
+  };
+  expectedOrders: {
+    label: string;
+    placeholder: string;
+    error: string;
+    options: string[];
+  };
   service: {
     label: string;
     placeholder: string;
     error: string;
+    quoteOptions: { text: string; icon: string }[];
   };
   address: {
     label: string;
@@ -78,7 +100,7 @@ type FormMessages = {
   };
 };
 
-export default function GetAQuoteForm({ slug }: { slug?: string }) {
+export default function GetAQuoteForm() {
   const getServices = (services: Services): ServicesOptions => {
     const individualServices = {
       title: services.individualServices.title,
@@ -100,6 +122,7 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
   const services = getServices(JSON.parse(JSON.stringify(servicesLinks)));
   const formMessages = messages.forms as FormMessages;
   const fileds: FormFields = formMessages.fields;
+  const quoteServiceOptions = formMessages.fields.service.quoteOptions || [];
 
   const getSelectedService = (slug: string | undefined) => {
     const getServiceText = (slug: string, text: string) => {
@@ -136,17 +159,12 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
     };
   };
 
-  const defaultService: string = getSelectedService(slug).value;
-
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
-    defaultValues: {
-      service: defaultService,
-    },
-  });
+  } = useForm<Inputs>();
 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -156,7 +174,7 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
     try {
       const reqBody = {
         locales,
-        data: { ...data, service: getSelectedService(data.service).text || "Service Unknown" },
+        data: { ...data },
       };
       axios.post("/api/get-a-quote", reqBody);
       setIsLoading(false);
@@ -208,7 +226,7 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
         id="phone"
         type="tel"
         placeholder={fileds.phone.placeholder}
-        error={errors.phone && errors.phone.message}
+        error={errors.phone && fileds.phone.error}
         icon="hugeicons:call-02"
         registerProps={{
           ...register("phone", {
@@ -217,19 +235,8 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
         }}
       />
 
-      {/* Service Select */}
-      <SelectServices
-        label={fileds.service.label}
-        icon="hugeicons:truck-delivery"
-        options={services}
-        id="service"
-        placeholder={fileds.service.placeholder}
-        registerProps={{ ...register("service", { required: true }) }}
-        error={errors.service && fileds.service.error}
-      />
-
       {/* Address */}
-      <div className="w-full md:col-span-2">
+      <div className="w-full">
         <Input
           label={fileds.address.label}
           id="address"
@@ -240,6 +247,74 @@ export default function GetAQuoteForm({ slug }: { slug?: string }) {
           registerProps={{ ...register("address", { required: true }) }}
         />
       </div>
+
+      {/* Company */}
+      <Input
+        label={fileds.company.label}
+        id="company"
+        type="text"
+        placeholder={fileds.company.placeholder}
+        error={errors.company && fileds.company.error}
+        icon="hugeicons:building-01"
+        registerProps={{
+          ...register("company", {
+            required: true,
+          }),
+        }}
+      />
+
+      {/* CR Number */}
+      <Input
+        label={fileds.crnumber.label}
+        id="crnumber"
+        type="text"
+        placeholder={fileds.crnumber.placeholder}
+        error={errors.crnumber && fileds.crnumber.error}
+        icon="hugeicons:input-numeric"
+        registerProps={{
+          ...register("crnumber", {
+            required: true,
+          }),
+        }}
+      />
+
+      <Controller
+        name="service"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <div className="w-full md:col-span-2">
+            <label htmlFor={"service"} className="mb-2 w-full text-base font-medium">
+              {fileds.service.label}
+            </label>
+            <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
+              {quoteServiceOptions.map((service, ind) => (
+                <div
+                  key={ind}
+                  onClick={() => field.onChange(service.text)} // update form value
+                  className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-md border p-4 transition ${field.value === service.text ? "border-theme-blue bg-theme-blue/10" : "border-gray-300"}`}
+                >
+                  <Icon icon={service.icon} className="size-8" />
+                  <p className="text-center text-sm">{service.text}</p>
+                </div>
+              ))}
+
+              {errors.service && <p className="text-sm text-red-500">{fileds.service.error}</p>}
+            </div>
+          </div>
+        )}
+      />
+
+      {/* Expected Orders */}
+      <Select
+        label={fileds.expectedOrders.label}
+        icon="hugeicons:truck-delivery"
+        options={fileds.expectedOrders.options.map(opt => ({ value: opt, name: opt }))}
+        id="expectedOrders"
+        placeholder={fileds.expectedOrders.placeholder}
+        registerProps={{ ...register("expectedOrders", { required: true }) }}
+        error={errors.expectedOrders && fileds.expectedOrders.error}
+      />
 
       {/* Message */}
       <div className="w-full md:col-span-2">

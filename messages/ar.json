@@ -40,14 +40,56 @@
       },
       "phone": {
         "label": "رقم الهاتف",
-        "placeholder": "966XXXXXXXXX+",
-        "error": "أدخل رقم هاتف سعودي صالح (+966XXXXXXXXX)",
-        "contactPageError": "أدخل رقم هاتف صالح"
+        "placeholder": "+966XXXXXXXXX",
+        "error": "رقم الهاتف مطلوب"
+      },
+      "crnumber": {
+        "label": "رقم السجل التجاري",
+        "placeholder": "أدخل رقم السجل التجاري",
+        "error": "رقم السجل التجاري مطلوب"
+      },
+      "expectedOrders": {
+        "label": "الطلبات الشهرية المتوقعة",
+        "placeholder": "اختر حجم الطلبات المتوقع",
+        "error": "يرجى اختيار عدد الطلبات الشهرية المتوقعة",
+        "options": [
+          "حتى 25 طلبًا في الشهر",
+          "من 26 إلى 100 طلب في الشهر",
+          "من 101 إلى 300 طلب في الشهر",
+          "من 301 إلى 750 طلبًا في الشهر",
+          "أكثر من 750 طلبًا في الشهر"
+        ]
       },
       "service": {
         "label": "الخدمة",
         "placeholder": "اختر الخدمة",
-        "error": "يرجى اختيار الخدمة"
+        "error": "يرجى اختيار الخدمة",
+        "quoteOptions": [
+          {
+            "text": "توصيل فائق السرعة",
+            "icon": "hugeicons:delivery-truck-01"
+          },
+          {
+            "text": "شحن البضائع",
+            "icon": "hugeicons:cargo-ship"
+          },
+          {
+            "text": "التخزين",
+            "icon": "hugeicons:warehouse"
+          },
+          {
+            "text": "الفولفيلمنت",
+            "icon": "hugeicons:store-management-02"
+          },
+          {
+            "text": "التأجير التشغيلي",
+            "icon": "hugeicons:new-releases"
+          },
+          {
+            "text": "الشحن المبرد",
+            "icon": "hugeicons:thermometer-cold"
+          }
+        ]
       },
       "address": {
         "label": "العنوان",

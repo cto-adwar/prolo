@@ -47,13 +47,55 @@
       "phone": {
         "label": "Phone",
         "placeholder": "+966XXXXXXXXX",
-        "error": "Enter a valid Saudi Arabia phone number (+966XXXXXXXXX)",
-        "contactPageError": "Enter a valid phone number"
+        "error": "Phone Number Is Required"
+      },
+      "crnumber": {
+        "label": "CR Number",
+        "placeholder": "Enter your CR Number",
+        "error": "CR Number is required"
+      },
+      "expectedOrders": {
+        "label": "Expected Monthly Orders",
+        "placeholder": "Select your estimated order volume",
+        "error": "Please select your expected monthly orders",
+        "options": [
+          "Up to 25 orders per month",
+          "26–100 orders per month",
+          "101–300 orders per month",
+          "301–750 orders per month",
+          "More than 750 orders per month"
+        ]
       },
       "service": {
         "label": "Service",
         "placeholder": "Select Service",
-        "error": "Please select Service"
+        "error": "Please select Service",
+        "quoteOptions": [
+          {
+            "text": "Bullet Delivery",
+            "icon": "hugeicons:delivery-truck-01"
+          },
+          {
+            "text": "Cargo Shipping",
+            "icon": "hugeicons:cargo-ship"
+          },
+          {
+            "text": "Storage",
+            "icon": "hugeicons:warehouse"
+          },
+          {
+            "text": "Inventory Management",
+            "icon": "hugeicons:store-management-02"
+          },
+          {
+            "text": "Operational Leasing",
+            "icon": "hugeicons:new-releases"
+          },
+          {
+            "text": "Refrigerated Shipping",
+            "icon": "hugeicons:thermometer-cold"
+          }
+        ]
       },
       "address": {
         "label": "Address",

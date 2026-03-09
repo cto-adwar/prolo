@@ -1,14 +1,12 @@
 "use client";
-import { useLocale, useTranslations } from "next-intl";
-import { Button, TrackingInput } from "../components";
+import { useTranslations } from "next-intl";
+import { TrackingInput } from "../components";
 import HeroLazyLogos from "../optimized/HeroLazyLogos";
 import HeroLazySlider from "../optimized/HeroLazySlider";
 // import HeroStatic from "../optimized/HeroStatic";
 
 export default function Hero() {
   const t = useTranslations("homepage");
-  const ctas = useTranslations("ctas");
-  const locale = useLocale();
 
   return (
     <section
