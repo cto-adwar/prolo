@@ -2212,12 +2212,6 @@
         "title": "خدمات القطاع التجاري",
         "cards": [
           {
-            "name": "الميل الأخير",
-            "description": "توصيل طلبات المتاجر باحترافية عالية",
-            "link": "/services/commercial-sector-services/last-mile",
-            "slug": "last-mile"
-          },
-          {
             "name": "توصيل فائق السرعة",
             "description": "طلبات فورية فائقة السرعة",
             "link": "/services/commercial-sector-services/bullet-delivery",

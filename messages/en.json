@@ -2184,12 +2184,6 @@
         "title": "Enterprise Services",
         "cards": [
           {
-            "name": "Last Mile",
-            "description": "Deliver store orders efficiently",
-            "link": "/services/commercial-sector-services/last-mile",
-            "slug": "last-mile"
-          },
-          {
             "name": "Bullet Delivery",
             "description": "Ultra-fast instant order processing",
             "link": "/services/commercial-sector-services/bullet-delivery",
