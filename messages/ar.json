@@ -2448,11 +2448,6 @@
         "title": "خدمات القطاع التجاري",
         "links": [
           {
-            "text": "الميل الأخير",
-            "link": "/services/commercial-sector-services/last-mile",
-            "slug": "last-mile"
-          },
-          {
             "text": "توصيل فائق السرعة",
             "link": "/services/commercial-sector-services/bullet-delivery",
             "slug": "commercial-bullet-delivery"

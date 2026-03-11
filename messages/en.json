@@ -2421,11 +2421,6 @@
         "title": "Enterprise Services",
         "links": [
           {
-            "text": "Last Mile",
-            "link": "/services/commercial-sector-services/last-mile",
-            "slug": "last-mile"
-          },
-          {
             "text": "Bullet Delivery",
             "link": "/services/commercial-sector-services/bullet-delivery",
             "slug": "commercial-bullet-delivery"
