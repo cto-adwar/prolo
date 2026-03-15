@@ -2186,37 +2186,37 @@
           {
             "name": "Bullet Delivery",
             "description": "Ultra-fast instant order processing",
-            "link": "/services/commercial-sector-services/bullet-delivery",
+            "link": "/services/bullet-delivery",
             "slug": "commercial-bullet-delivery"
           },
           {
             "name": "Cargo Shipping Service",
             "description": "Schedule goods shipment nationwide",
-            "link": "/services/commercial-sector-services/b2b-shipping",
+            "link": "/services/b2b-shipping",
             "slug": "b2b-shipping"
           },
           {
             "name": "Storage for others",
             "description": "Flexible and secure warehouse storage",
-            "link": "/services/commercial-sector-services/storage-for-others",
+            "link": "/services/storage-for-others",
             "slug": "storage-for-others"
           },
           {
             "name": "Operational Leasing",
             "description": "Providing vehicles with drivers, operational management, and vehicle rental services",
-            "link": "/services/commercial-sector-services/operational-leasing",
+            "link": "/services/operational-leasing",
             "slug": "operational-leasing"
           },
           {
             "name": "Refrigerated shipping",
             "description": "Refrigerated shipping for online stores and various sectors",
-            "link": "/services/commercial-sector-services/refrigerated-shipping",
+            "link": "/services/refrigerated-shipping",
             "slug": "commercial-refrigerated-shipping"
           },
           {
             "name": "Complete Inventory Management Service for E-commerce Stores",
             "description": "Store, track, and manage orders",
-            "link": "/services/commercial-sector-services/fulfillment-service",
+            "link": "/services/fulfillment-service",
             "slug": "fulfillment-service"
           }
         ]
@@ -2416,32 +2416,32 @@
         "links": [
           {
             "text": "Bullet Delivery",
-            "link": "/services/commercial-sector-services/bullet-delivery",
+            "link": "/services/bullet-delivery",
             "slug": "commercial-bullet-delivery"
           },
           {
             "text": "Cargo Shipping Service",
-            "link": "/services/commercial-sector-services/b2b-shipping",
+            "link": "/services/b2b-shipping",
             "slug": "b2b-shipping"
           },
           {
             "text": "Storage for others",
-            "link": "/services/commercial-sector-services/storage-for-others",
+            "link": "/services/storage-for-others",
             "slug": "storage-for-others"
           },
           {
             "text": "Complete Inventory Management Service for E-commerce Stores",
-            "link": "/services/commercial-sector-services/fulfillment-service",
+            "link": "/services/fulfillment-service",
             "slug": "fulfillment-service"
           },
           {
             "text": "Operational Leasing",
-            "link": "/services/commercial-sector-services/operational-leasing",
+            "link": "/services/operational-leasing",
             "slug": "operational-leasing"
           },
           {
             "text": "Refrigerated Shipping",
-            "link": "/services/commercial-sector-services/refrigerated-shipping",
+            "link": "/services/refrigerated-shipping",
             "slug": "commercial-refrigerated-shipping"
           }
         ]

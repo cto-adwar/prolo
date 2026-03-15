@@ -2214,37 +2214,37 @@
           {
             "name": "توصيل فائق السرعة",
             "description": "طلبات فورية فائقة السرعة",
-            "link": "/services/commercial-sector-services/bullet-delivery",
+            "link": "/services/bullet-delivery",
             "slug": "commercial-bullet-delivery"
           },
           {
             "name": "خدمة شحن البضائع ( قطاع الأعمال)",
             "description": "شحن البضائع داخل المملكة",
-            "link": "/services/commercial-sector-services/b2b-shipping",
+            "link": "/services/b2b-shipping",
             "slug": "b2b-shipping"
           },
           {
             "name": "التخزين للغير",
             "description": "مساحات تخزينية مرنة وآمنة",
-            "link": "/services/commercial-sector-services/storage-for-others",
+            "link": "/services/storage-for-others",
             "slug": "storage-for-others"
           },
           {
             "name": "التأجير التشغيلي",
             "description": "توفير المركبات مع السائقين، وإدارة التشغيل، وخدمات تأجير المركبات",
-            "link": "/services/commercial-sector-services/operational-leasing",
+            "link": "/services/operational-leasing",
             "slug": "operational-leasing"
           },
           {
             "name": "الشحن المبرد",
             "description": "شحن مبرد للمتاجر الإلكترونية والقطاعات المختلفة",
-            "link": "/services/commercial-sector-services/refrigerated-shipping",
+            "link": "/services/refrigerated-shipping",
             "slug": "commercial-refrigerated-shipping"
           },
           {
             "name": "خدمة إدارة المخزون الكاملة للمتاجر الإلكترونية (الفولفيلمنت)",
             "description": "إدارة المخزون والطلبات للمتاجر الالكترونية",
-            "link": "/services/commercial-sector-services/fulfillment-service",
+            "link": "/services/fulfillment-service",
             "slug": "fulfillment-service"
           }
         ]
@@ -2443,32 +2443,32 @@
         "links": [
           {
             "text": "توصيل فائق السرعة",
-            "link": "/services/commercial-sector-services/bullet-delivery",
+            "link": "/services/bullet-delivery",
             "slug": "commercial-bullet-delivery"
           },
           {
             "text": "خدمة شحن البضائع (قطاع الأعمال)",
-            "link": "/services/commercial-sector-services/b2b-shipping",
+            "link": "/services/b2b-shipping",
             "slug": "b2b-shipping"
           },
           {
             "text": "التخزين للغير",
-            "link": "/services/commercial-sector-services/storage-for-others",
+            "link": "/services/storage-for-others",
             "slug": "storage-for-others"
           },
           {
             "text": "خدمة إدارة المخزون الكاملة للمتاجر الإلكترونية",
-            "link": "/services/commercial-sector-services/fulfillment-service",
+            "link": "/services/fulfillment-service",
             "slug": "fulfillment-service"
           },
           {
             "text": "التأجير التشغيلي",
-            "link": "/services/commercial-sector-services/operational-leasing",
+            "link": "/services/operational-leasing",
             "slug": "operational-leasing"
           },
           {
             "text": "الشحن المبرد",
-            "link": "/services/commercial-sector-services/refrigerated-shipping",
+            "link": "/services/refrigerated-shipping",
             "slug": "commercial-refrigerated-shipping"
           }
         ]
