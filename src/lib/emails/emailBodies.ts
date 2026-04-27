@@ -94,7 +94,7 @@ export const buildCustomerSubEmailBody = (locale: Locale): string => {
         <a class="btn primary" href="https://prolo.sa/ar/get-a-quote"
           >احصل على عرض سعر</a
         >
-       // <a class="btn secondary" href="https://prolo.sa/ar/create-shipment"
+        <a class="btn secondary" href="https://prolo.sa/ar/create-shipment"
           >إنشاء شحنة</a
         >
       </div>
